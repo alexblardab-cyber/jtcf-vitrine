@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>JTCF</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
+:root{--gold:#C9A020;--dark:#1a1a1e;--dark2:#2a2a2f;--dark3:#38383f;--text:#f0f0f0;--muted:#aaa;--card:#2e2e34;--soon:#e07b00}
+body{background:var(--dark);color:var(--text);min-height:100vh;max-width:420px;margin:0 auto}
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+.tb{background:var(--dark2);padding:11px 13px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--dark3);position:sticky;top:0;z-index:10}
+.tb-logo{width:38px;height:38px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tb h1{font-size:15px;font-weight:600;flex:1}
+.tb-sub{font-size:11px;color:var(--muted)}
+.back{background:none;border:none;color:var(--gold);font-size:13px;cursor:pointer;padding:4px 6px;border-radius:6px;white-space:nowrap}
+.lang-btn{background:var(--dark3);border:1px solid var(--dark3);color:var(--gold);font-size:11px;font-weight:700;padding:5px 9px;border-radius:20px;cursor:pointer;flex-shrink:0}
+.pg{padding:14px;padding-bottom:32px;flex:1;overflow-y:auto}
+.hero{background:var(--dark2);border-radius:14px;padding:20px 16px;margin-bottom:14px;border:1px solid var(--dark3)}
+.hero h2{font-size:19px;font-weight:600;color:var(--gold);margin-bottom:6px}
+.hero p{font-size:13px;color:var(--muted);line-height:1.5}
+.cta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.cta-card{background:var(--card);border:1px solid var(--dark3);border-radius:14px;padding:18px 12px;cursor:pointer;transition:border-color .2s;text-align:center}
+.cta-card:hover{border-color:var(--gold)}
+.cta-card .icon{font-size:26px;margin-bottom:8px}
+.cta-card h3{font-size:12px;font-weight:600;color:var(--text);line-height:1.4}
+.info-box{background:var(--card);border-radius:12px;padding:13px 15px;border:1px solid var(--dark3)}
+.info-box h4{font-size:11px;font-weight:600;color:var(--gold);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.info-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-size:13px;color:var(--muted);border-bottom:1px solid var(--dark3)}
+.info-row:last-child{border-bottom:none}
+.info-row span{color:var(--text)}
+.cat-title{font-size:11px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.6px;margin:16px 0 8px}
+.cat-title:first-child{margin-top:0}
+/* Formation card */
+.f-card{background:var(--card);border:1px solid var(--dark3);border-radius:12px;margin-bottom:8px;overflow:hidden;cursor:pointer}
+.f-head{padding:12px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.f-head h4{font-size:13px;font-weight:500;color:var(--text);line-height:1.4;flex:1}
+.f-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;white-space:nowrap}
+.badge.dispo{background:#1a3d1a;color:#5fc45f;border:1px solid #2a5a2a}
+.badge.bientot{background:#3d2200;color:#e09030;border:1px solid #5a3300}
+.badge.niv{background:#1a2f5a;color:#7fb8f0;border:1px solid #1a4a8a}
+.badge.alt{background:#2a1a5a;color:#b07ff0;border:1px solid #3a2a8a}
+.badge.cont{background:#1a3a2a;color:#60d0a0;border:1px solid #1a5a3a}
+.chev{color:var(--muted);font-size:11px;transition:transform .2s;margin-top:2px}
+/* Synoptic bar */
+.synop{display:flex;gap:6px;padding:0 14px 8px;flex-wrap:wrap}
+.synop-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted)}
+.synop-item strong{color:var(--gold)}
+/* Details */
+.f-det{display:none;padding:0 14px 14px;border-top:1px solid var(--dark3)}
+.f-det.open{display:block}
+.f-desc{font-size:12px;color:var(--muted);line-height:1.6;margin:10px 0 12px}
+.blocs-title{font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+.bloc-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text);padding:5px 0;border-bottom:1px solid var(--dark3);line-height:1.4}
+.bloc-item:last-child{border-bottom:none}
+.bloc-num{font-size:10px;font-weight:700;color:var(--gold);min-width:16px;margin-top:1px}
+.f-meta{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.f-meta-item{background:var(--dark2);border-radius:8px;padding:8px 10px}
+.f-meta-item label{display:block;font-size:10px;color:var(--gold);font-weight:600;text-transform:uppercase;margin-bottom:3px}
+.f-meta-item span{font-size:11px;color:var(--text);line-height:1.4}
+/* Modalites info card */
+.modal-card{background:var(--dark2);border:1px solid var(--dark3);border-radius:12px;margin-bottom:14px;overflow:hidden;cursor:pointer}
+.modal-head{padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+.modal-head h4{font-size:13px;font-weight:600;color:var(--gold)}
+.modal-body{display:none;padding:0 14px 14px}
+.modal-body.open{display:block}
+.modality-col{background:var(--card);border-radius:10px;padding:12px;margin-bottom:8px}
+.modality-col h5{font-size:13px;font-weight:600;margin-bottom:8px}
+.modality-col ul{list-style:none;padding:0}
+.modality-col ul li{font-size:12px;color:var(--muted);padding:3px 0;display:flex;gap:6px;line-height:1.4}
+.modality-col ul li::before{content:"•";color:var(--gold);flex-shrink:0}
+/* Sites */
+.map-cards{display:flex;flex-direction:column;gap:10px}
+.map-card{background:var(--card);border:1px solid var(--dark3);border-radius:12px;padding:14px 15px;display:flex;align-items:center;gap:12px}
+.map-pin{width:40px;height:40px;background:var(--dark2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.map-info{flex:1}
+.map-info h4{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
+.map-info p{font-size:12px;color:var(--muted)}
+.map-btn{background:var(--gold);color:#1a1a00;border:none;border-radius:8px;padding:7px 12px;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap}
+/* Form */
+.fg{margin-bottom:13px}
+.fg label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+input,select,textarea{width:100%;background:var(--card);border:1px solid var(--dark3);border-radius:10px;padding:10px 13px;color:var(--text);font-size:14px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+select option{background:var(--dark2)}
+textarea{resize:vertical;min-height:75px}
+.submit-btn{width:100%;background:var(--gold);color:#1a1a00;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;margin-top:6px}
+.submit-btn:active{transform:scale(.98)}
+.success-box{background:#0d2b0d;border:1px solid #2a5a2a;border-radius:14px;padding:22px;text-align:center;display:none}
+.success-box .ico{font-size:36px;margin-bottom:10px}
+.success-box h3{color:#5fc45f;font-size:16px;margin-bottom:8px}
+.success-box p{color:var(--muted);font-size:13px;line-height:1.5}
+.rdv-btn{background:var(--card);border:1px solid var(--dark3);border-radius:12px;padding:14px;text-align:center;cursor:pointer;margin-top:6px}
+.nota{background:var(--dark2);border-left:3px solid var(--soon);border-radius:0 10px 10px 0;padding:10px 13px;margin-bottom:14px;font-size:12px;color:var(--muted);line-height:1.5}
+</style>
+</head>
+<body>
+
+<div id="accueil" class="screen active">
+  <div class="tb"><div class="tb-logo"><svg viewBox="0 0 80 80" width="38" height="38"><rect width="80" height="80" fill="white"/><text x="40" y="18" text-anchor="middle" fill="#C9A020" font-size="13" font-family="serif">★ ★ ★</text><text x="40" y="52" text-anchor="middle" fill="#C9A020" font-size="30" font-family="Georgia,serif" font-style="italic">JT</text><text x="40" y="63" text-anchor="middle" fill="#C9A020" font-size="8" font-family="sans-serif" letter-spacing="2">CONSEIL</text><text x="40" y="73" text-anchor="middle" fill="#C9A020" font-size="7" font-family="sans-serif" letter-spacing="2">FORMATION</text></svg></div>
+    <div style="flex:1"><h1>JT Conseil Formation</h1><div class="tb-sub">Centre de formation — La Réunion</div></div>
+    <button class="lang-btn" onclick="toggleLang()">CR / FR</button>
+  </div>
+  <div class="pg">
+    <div class="hero">
+      <h2 class="t" data-fr="Bienvenue chez JTCF" data-cr="Bienveni dann JTCF"></h2>
+      <p class="t" data-fr="Construisez votre avenir professionnel avec nos formations certifiantes et nos dispositifs d'alternance à La Réunion." data-cr="Konstri zot lavenir profesionèl èk nout formations certifiantes La Rényon."></p>
+    </div>
+    <div class="cta-grid">
+      <div class="cta-card" onclick="show('formations')"><div class="icon">📚</div><h3 class="t" data-fr="Nos formations" data-cr="Nout formations"></h3></div>
+      <div class="cta-card" onclick="show('preinscription')"><div class="icon">📅</div><h3 class="t" data-fr="Prendre un RDV" data-cr="Pran in randev"></h3></div>
+      <div class="cta-card" onclick="show('sites')"><div class="icon">📍</div><h3 class="t" data-fr="Nous trouver" data-cr="Trouv nou"></h3></div>
+    </div>
+    <div class="info-box">
+      <h4 class="t" data-fr="Contact" data-cr="Kontakt"></h4>
+      <div class="info-row">📍 <span>20A rue Général Lambert, 97480 Saint-Joseph</span></div>
+      <div class="info-row">🗺️ <span>Interventions : Saint-Joseph · Saint-Pierre · Petite-Île · Saint-Philippe</span></div>
+      <div class="info-row">✉️ <span>contact@tbrgroup.fr</span></div>
+      <div class="info-row">🕐 <span class="t" data-fr="Du lundi au vendredi" data-cr="Lindi osi vandrédi"></span></div>
+    </div>
+  </div>
+</div>
+
+<div id="formations" class="screen">
+  <div class="tb"><div class="tb-logo"><svg viewBox="0 0 80 80" width="38" height="38"><rect width="80" height="80" fill="white"/><text x="40" y="18" text-anchor="middle" fill="#C9A020" font-size="13" font-family="serif">★ ★ ★</text><text x="40" y="52" text-anchor="middle" fill="#C9A020" font-size="30" font-family="Georgia,serif" font-style="italic">JT</text><text x="40" y="63" text-anchor="middle" fill="#C9A020" font-size="8" font-family="sans-serif" letter-spacing="2">CONSEIL</text><text x="40" y="73" text-anchor="middle" fill="#C9A020" font-size="7" font-family="sans-serif" letter-spacing="2">FORMATION</text></svg></div>
+    <div style="flex:1"><h1 class="t" data-fr="Nos formations" data-cr="Nout formations"></h1></div>
+    <button class="lang-btn" onclick="toggleLang()">CR / FR</button>
+    <button class="back" onclick="show('accueil')">← <span class="t" data-fr="Retour" data-cr="Rétour"></span></button>
+  </div>
+  <div class="pg">
+    <div class="nota"><span style="color:var(--soon);font-weight:600">🟠 Bientôt disponible</span> — formations en attente d'habilitation (2 à 3 mois). Les heures indiquées sont approximatives.</div>
+
+    <!-- Modalités info -->
+    <div class="modal-card">
+      <div class="modal-head" onclick="toggleModal()">
+        <h4>ℹ️ Alternance vs Formation continue — Quelle différence ?</h4>
+        <span id="modal-chev" style="color:var(--muted);font-size:11px">▼</span>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <div class="modality-col">
+          <h5>🔄 Alternance (Apprentissage)</h5>
+          <ul>
+            <li>Contrat signé avec une entreprise partenaire</li>
+            <li>Public : 18–29 ans (ou sans limite si travailleur handicapé)</li>
+            <li>Rémunéré entre 27 % et 100 % du SMIC selon l'âge et l'année</li>
+            <li>Rythme : environ 1 semaine sur 2 en centre / en entreprise</li>
+            <li>Durée : 12 à 24 mois selon la formation</li>
+            <li>Financement : pris en charge par l'OPCO, sans frais pour l'apprenti</li>
+          </ul>
+        </div>
+        <div class="modality-col">
+          <h5>📚 Formation continue</h5>
+          <ul>
+            <li>À temps plein au centre de formation JTCF</li>
+            <li>Public : tout âge, tout statut</li>
+            <li>Financement : CPF, France Travail, OPCO, Région, employeur</li>
+            <li>Demandeurs d'emploi : maintien possible de l'allocation</li>
+            <li>Durée : 4 à 12 mois selon la formation et le niveau</li>
+            <li>Possibilité d'entrées en cours de formation selon disponibilité</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="formations-list"></div>
+    <div class="rdv-btn" onclick="show('preinscription')"><h3 style="color:var(--gold);font-size:13px">📅 Prendre un rendez-vous →</h3></div>
+  </div>
+</div>
+
+<div id="sites" class="screen">
+  <div class="tb"><div class="tb-logo"><svg viewBox="0 0 80 80" width="38" height="38"><rect width="80" height="80" fill="white"/><text x="40" y="18" text-anchor="middle" fill="#C9A020" font-size="13" font-family="serif">★ ★ ★</text><text x="40" y="52" text-anchor="middle" fill="#C9A020" font-size="30" font-family="Georgia,serif" font-style="italic">JT</text><text x="40" y="63" text-anchor="middle" fill="#C9A020" font-size="8" font-family="sans-serif" letter-spacing="2">CONSEIL</text><text x="40" y="73" text-anchor="middle" fill="#C9A020" font-size="7" font-family="sans-serif" letter-spacing="2">FORMATION</text></svg></div>
+    <div style="flex:1"><h1 class="t" data-fr="Nous trouver" data-cr="Trouv nou"></h1></div>
+    <button class="lang-btn" onclick="toggleLang()">CR / FR</button>
+    <button class="back" onclick="show('accueil')">← <span class="t" data-fr="Retour" data-cr="Rétour"></span></button>
+  </div>
+  <div class="pg">
+    <div class="map-cards">
+      <div class="map-card" style="flex-direction:column;align-items:flex-start;gap:10px">
+        <div style="display:flex;align-items:center;gap:12px;width:100%">
+          <div class="map-pin">🏢</div>
+          <div class="map-info"><h4>JT Conseil Formation</h4><p>20A rue Général Lambert</p><p>97480 Saint-Joseph</p></div>
+          <a class="map-btn" href="https://maps.google.com/?q=20A+rue+General+Lambert+97480+Saint-Joseph+La+Reunion" target="_blank">Maps</a>
+        </div>
+      </div>
+      <div class="info-box" style="margin-top:4px">
+        <h4 class="t" data-fr="Zones d'intervention" data-cr="Zòn dintèrvansion"></h4>
+        <div class="info-row">🗺️ <span>Saint-Joseph · Saint-Pierre · Petite-Île · Saint-Philippe</span></div>
+        <div class="info-row" style="border:none;font-size:12px"><span class="t" data-fr="Nous intervenons sur l'ensemble du Sud de La Réunion." data-cr="Nou intervèn su tout Sid La Rényon."></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="preinscription" class="screen">
+  <div class="tb"><div class="tb-logo"><svg viewBox="0 0 80 80" width="38" height="38"><rect width="80" height="80" fill="white"/><text x="40" y="18" text-anchor="middle" fill="#C9A020" font-size="13" font-family="serif">★ ★ ★</text><text x="40" y="52" text-anchor="middle" fill="#C9A020" font-size="30" font-family="Georgia,serif" font-style="italic">JT</text><text x="40" y="63" text-anchor="middle" fill="#C9A020" font-size="8" font-family="sans-serif" letter-spacing="2">CONSEIL</text><text x="40" y="73" text-anchor="middle" fill="#C9A020" font-size="7" font-family="sans-serif" letter-spacing="2">FORMATION</text></svg></div>
+    <div style="flex:1"><h1 class="t" data-fr="Prendre un RDV" data-cr="Pran in randev"></h1></div>
+    <button class="lang-btn" onclick="toggleLang()">CR / FR</button>
+    <button class="back" onclick="show('accueil')">← <span class="t" data-fr="Retour" data-cr="Rétour"></span></button>
+  </div>
+  <div class="pg">
+    <div id="form-container">
+      <div class="fg"><label class="t" data-fr="Nom *" data-cr="Non *"></label><input type="text" id="nom" placeholder="..."></div>
+      <div class="fg"><label class="t" data-fr="Prénom *" data-cr="Prenon *"></label><input type="text" id="prenom" placeholder="..."></div>
+      <div class="fg"><label class="t" data-fr="Téléphone *" data-cr="Téléphone *"></label><input type="tel" id="tel" placeholder="0692 00 00 00"></div>
+      <div class="fg"><label class="t" data-fr="Date de naissance *" data-cr="Dat naissans *"></label><input type="date" id="ddn"></div>
+      <div class="fg"><label class="t" data-fr="Situation actuelle *" data-cr="Sitiyasion aktyèl *"></label>
+        <select id="situation">
+          <option value="" class="t" data-fr="-- Sélectionnez --" data-cr="-- Choisir --"></option>
+          <option class="t" data-fr="Demandeur d'emploi" data-cr="Chèr travay"></option>
+          <option class="t" data-fr="Salarié" data-cr="Travayèr"></option>
+          <option class="t" data-fr="Étudiant / Lycéen" data-cr="Élèv / Létudiant"></option>
+          <option class="t" data-fr="Sans activité" data-cr="San aktivité"></option>
+          <option class="t" data-fr="Bénéficiaire RSA" data-cr="Bénéficiaire RSA"></option>
+          <option class="t" data-fr="Autre" data-cr="Ot kèk"></option>
+        </select>
+      </div>
+      <div class="fg"><label class="t" data-fr="Formation souhaitée *" data-cr="Formation ou lé *"></label>
+        <select id="formation">
+          <option value="">--</option>
+          <optgroup label="Commerce"><option>TP Manager des Établissements Marchands</option><option>TP Conseiller de Vente</option><option>TP Assistant Commercial</option><option>TP Responsable des Établissements Marchands</option><option>TP Employé Commercial</option></optgroup>
+          <optgroup label="Administration"><option>TP Chargé d'Accueil et de Gestion Administrative</option><option>TP Secrétaire Comptable</option><option>TP Secrétaire Assistant Médico-Administrative</option><option>TP Assistant de Direction</option><option>TP Assistant Ressource Humaine (ARH)</option></optgroup>
+          <optgroup label="Médiation"><option>TP Agent de Médiation Information Services (bientôt)</option><option>TP Conseiller en Insertion Professionnelle</option></optgroup>
+          <optgroup label="Tourisme"><option>TP Chargé d'Accueil Touristique et de Loisirs</option><option>TP Guide Accompagnateur Touristique</option></optgroup>
+          <optgroup label="Aide à la personne"><option>TP Responsable Coordinateur Services au Domicile</option><option>TP Assistant de Vie aux Familles (bientôt)</option></optgroup>
+          <optgroup label="Alternance"><option>Alternance / Apprentissage (Commerce)</option><option>Alternance / Apprentissage (Administration)</option></optgroup>
+        </select>
+      </div>
+      <div class="fg"><label class="t" data-fr="Message (optionnel)" data-cr="Mésaz (optionèl)"></label><textarea id="message" placeholder="..."></textarea></div>
+      <p style="font-size:11px;color:var(--muted);margin-bottom:10px" class="t" data-fr="* Champs obligatoires." data-cr="* Samp obligatwar."></p>
+      <button class="submit-btn t" data-fr="📩 Envoyer ma demande" data-cr="📩 Anvoyé mon domand" onclick="envoyerRDV()"></button>
+    </div>
+    <div class="success-box" id="success">
+      <div class="ico">✅</div>
+      <h3 class="t" data-fr="Demande envoyée !" data-cr="Domand anvoyé !"></h3>
+      <p class="t" data-fr="Votre messagerie va s'ouvrir. Envoyez l'e-mail pour confirmer. L'équipe JTCF vous contactera rapidement." data-cr="Zot mésazri va louvèr. Anvoyé l'e-mail pou konfirmé."></p>
+      <button class="submit-btn" style="margin-top:14px;background:var(--dark3);color:var(--text)" onclick="resetForm()">Nouvelle demande</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var lang='fr';
+
+var formations=[
+  {cat:"🛍️ Commerce",items:[
+    {name:"TP Employé Commercial",st:"dispo",niv:3,h:343,
+     mod:["continue","alternance"],
+     duree:"4-5 mois",public:"Tout public, débutant accepté",deb:"Employé commercial, hôte/hôtesse de caisse, vendeur en surface de vente",
+     desc:"Réaliser les opérations de mise en rayon, d'accueil et d'encaissement dans un commerce de détail ou en grande surface.",
+     blocs:["Approvisionner et présenter le rayon en respectant les règles de merchandising","Orienter et renseigner le client en surface de vente","Réaliser les opérations d'encaissement et gérer les flux"]},
+    {name:"TP Conseiller de Vente",st:"dispo",niv:4,h:450,
+     mod:["continue","alternance"],
+     duree:"6-8 mois",public:"Niveau 3e, tout public",deb:"Vendeur conseil, conseiller commercial, animateur des ventes",
+     desc:"Développer une relation client de qualité, maîtriser les techniques de vente et contribuer à la performance commerciale d'un point de vente.",
+     blocs:["Développer sa connaissance des produits et services pour mieux conseiller","Mener un entretien de vente et proposer des ventes complémentaires","Fidéliser la clientèle et contribuer à l'animation du rayon","Assurer le suivi de son activité et des indicateurs commerciaux"]},
+    {name:"TP Assistant Commercial",st:"dispo",niv:4,h:420,
+     mod:["continue"],
+     duree:"7-8 mois",public:"Niveau Bac, tout public",deb:"Assistant commercial, chargé de clientèle, assistant ADV",
+     desc:"Assurer le support commercial et administratif d'une équipe de vente, gérer la relation client multicanale et contribuer au développement du portefeuille.",
+     blocs:["Prospecter et développer un portefeuille clients","Gérer les commandes et assurer le suivi administratif des ventes","Assurer la relation client à distance (téléphone, e-mail, réseaux)","Produire des tableaux de bord et contribuer au reporting commercial"]},
+    {name:"TP Manager des Établissements Marchands",st:"dispo",niv:5,h:560,
+     mod:["continue","alternance"],
+     duree:"10-12 mois",public:"Niveau Bac, expérience commerce appréciée",deb:"Manager de rayon, responsable de magasin, adjoint de direction",
+     desc:"Encadrer et animer une équipe commerciale, piloter les indicateurs de performance et assurer la dynamique commerciale d'un point de vente.",
+     blocs:["Animer et manager une équipe commerciale au quotidien","Piloter l'activité commerciale et les indicateurs de performance","Organiser la mise en valeur des produits et les opérations promotionnelles","Assurer la gestion administrative et RH de l'unité marchande"]},
+    {name:"TP Responsable des Établissements Marchands",st:"dispo",niv:5,h:560,
+     mod:["continue"],
+     duree:"10-12 mois",public:"Niveau Bac+2 ou expérience significative",deb:"Directeur de magasin, responsable de site, chef de département",
+     desc:"Diriger un établissement commercial, développer le chiffre d'affaires, encadrer les équipes et garantir la rentabilité du point de vente.",
+     blocs:["Définir et déployer la stratégie commerciale de l'établissement","Recruter, intégrer et évaluer les collaborateurs","Optimiser la rentabilité et gérer les budgets de l'unité","Assurer la conformité légale et réglementaire de l'établissement"]}
+  ]},
+  {cat:"🗂️ Administration",items:[
+    {name:"TP Chargé d'Accueil et de Gestion Administrative",st:"dispo",niv:4,h:550,
+     mod:["continue","alternance"],
+     duree:"7-9 mois",public:"Niveau 3e, tout public",deb:"Secrétaire, assistant administratif, agent d'accueil, chargé de gestion",
+     desc:"Assurer l'accueil physique et téléphonique, traiter les documents administratifs et coordonner les activités de secrétariat d'une structure.",
+     blocs:["Assurer l'accueil physique et téléphonique et orienter les interlocuteurs","Traiter les courriers, e-mails et documents administratifs courants","Gérer les agendas, réunions et déplacements","Utiliser les outils bureautiques et les logiciels métiers"]},
+    {name:"TP Secrétaire Comptable",st:"dispo",niv:4,h:490,
+     mod:["continue"],
+     duree:"8-9 mois",public:"Niveau 3e, affinité pour les chiffres",deb:"Secrétaire comptable, aide-comptable, assistant de gestion",
+     desc:"Réaliser les opérations de comptabilité générale courante et assurer les tâches de secrétariat d'une PME ou d'un cabinet.",
+     blocs:["Saisir et contrôler les opérations comptables courantes","Établir les déclarations fiscales et sociales de base","Assurer le suivi de la trésorerie et des règlements","Produire des documents administratifs et gérer les courriers"]},
+    {name:"TP Secrétaire Assistant Médico-Administrative",st:"dispo",niv:4,h:490,
+     mod:["continue"],
+     duree:"8-9 mois",public:"Tout public, intérêt pour le secteur santé",deb:"Secrétaire médicale, agent administratif hospitalier, assistant de soins",
+     desc:"Assurer l'accueil des patients, gérer les dossiers médicaux et administratifs et assurer la coordination avec les professionnels de santé.",
+     blocs:["Accueillir et orienter les patients en structure de santé","Gérer les dossiers médicaux et les données de santé dans le respect du secret médical","Planifier les rendez-vous et coordonner les soins","Assurer la facturation et le suivi des remboursements (CPAM, mutuelles)"]},
+    {name:"TP Assistant de Direction",st:"dispo",niv:5,h:450,
+     mod:["continue","alternance"],
+     duree:"6-8 mois",public:"Niveau Bac, maîtrise bureautique",deb:"Assistant de direction, office manager, assistant exécutif",
+     desc:"Assister un cadre dirigeant dans l'organisation de son activité, la gestion des communications et la coordination administrative de son service.",
+     blocs:["Organiser l'agenda, les déplacements et les réunions du dirigeant","Assurer la communication interne et externe (courriers, comptes rendus, présentations)","Gérer les dossiers sensibles et les informations confidentielles","Coordonner les activités administratives du service et superviser les prestataires"]},
+    {name:"TP Assistant Ressource Humaine (ARH)",st:"dispo",niv:5,h:490,
+     mod:["continue"],
+     duree:"9-10 mois",public:"Niveau Bac, intérêt pour les relations humaines",deb:"Assistant RH, chargé de missions RH, gestionnaire paie junior",
+     desc:"Participer à la gestion administrative du personnel, au recrutement, à la formation et au développement des compétences au sein d'une organisation.",
+     blocs:["Assurer l'administration du personnel (contrats, absences, paie de base)","Participer au recrutement et à l'intégration des nouveaux collaborateurs","Contribuer au plan de formation et au suivi des compétences","Informer les salariés sur leurs droits et obligations (droit du travail)"]},
+  ]},
+  {cat:"🤝 Médiation",items:[
+    {name:"TP Agent de Médiation Information Services",st:"bientot",niv:4,h:385,
+     mod:["continue"],
+     duree:"6-8 mois",public:"Tout public, sens du relationnel",deb:"Médiateur social, agent de prévention, chargé d'information usagers",
+     desc:"Faciliter le lien entre les usagers et les services publics ou associatifs, prévenir et gérer les conflits, et orienter les publics vers les dispositifs adaptés.",
+     blocs:["Accueillir et orienter les usagers dans leurs démarches administratives","Faciliter le dialogue et prévenir les situations conflictuelles","Informer sur les droits et les dispositifs d'aide","Développer des actions de médiation sur le territoire"]},
+    {name:"TP Conseiller en Insertion Professionnelle",st:"dispo",niv:5,h:560,
+     mod:["continue"],
+     duree:"10-11 mois",public:"Expérience ou fort intérêt pour l'accompagnement humain",deb:"CIP, conseiller emploi, chargé d'insertion, référent parcours",
+     desc:"Accompagner les personnes en recherche d'emploi ou de reconversion vers la construction et la réalisation d'un projet professionnel réaliste et durable.",
+     blocs:["Accueillir et réaliser un diagnostic global de la situation de la personne","Accompagner l'élaboration et la mise en œuvre du projet professionnel","Animer des ateliers collectifs (CV, entretien, techniques de recherche d'emploi)","Développer et entretenir les partenariats avec les employeurs et acteurs de l'insertion"]}
+  ]},
+  {cat:"🌴 Tourisme",items:[
+    {name:"TP Chargé d'Accueil Touristique et de Loisirs",st:"dispo",niv:4,h:420,
+     mod:["continue"],
+     duree:"7-8 mois",public:"Tout public, sens de l'accueil, langues appréciées",deb:"Agent d'accueil touristique, animateur de loisirs, chargé d'information touristique",
+     desc:"Accueillir et informer les visiteurs dans les structures touristiques, organiser et animer des activités de loisirs, et valoriser les richesses du territoire réunionnais.",
+     blocs:["Accueillir et informer les visiteurs en français et en langue étrangère","Promouvoir les offres touristiques et les sites du territoire","Organiser et animer des activités et séjours de loisirs","Assurer la gestion administrative et commerciale de la structure"]},
+    {name:"TP Guide Accompagnateur Touristique",st:"dispo",niv:4,h:450,
+     mod:["continue"],
+     duree:"7-8 mois",public:"Bonne connaissance du territoire réunionnais",deb:"Guide touristique, accompagnateur de groupe, animateur patrimonial",
+     desc:"Encadrer et guider des groupes lors de visites culturelles, patrimoniales ou naturelles, en valorisant les richesses de La Réunion.",
+     blocs:["Préparer et organiser des circuits et visites guidées","Animer des visites en valorisant la culture, la nature et le patrimoine réunionnais","Assurer la sécurité et le bien-être des groupes accompagnés","Gérer la logistique et les aspects administratifs des tours"]}
+  ]},
+  {cat:"💙 Aide à la personne",items:[
+    {name:"TP Responsable Coordinateur Services au Domicile",st:"dispo",niv:5,h:490,
+     mod:["continue"],
+     duree:"9-10 mois",public:"Expérience dans le secteur médico-social requise",deb:"Coordinateur de services à domicile, responsable de secteur, chef d'équipe SAP",
+     desc:"Coordonner les interventions des équipes à domicile, gérer les plannings, assurer la qualité du service et développer les partenariats avec les acteurs du maintien à domicile.",
+     blocs:["Évaluer les besoins des bénéficiaires et organiser les interventions à domicile","Manager et encadrer les équipes d'auxiliaires de vie","Assurer la qualité du service et la conformité réglementaire","Développer les partenariats avec les acteurs sanitaires et sociaux du territoire"]},
+    {name:"TP Assistant de Vie aux Familles",st:"bientot",niv:3,h:280,
+     mod:["continue"],
+     duree:"4-6 mois",public:"Tout public, empathie et bienveillance requises",deb:"Auxiliaire de vie sociale, aide à domicile, assistant familial, ADVF",
+     desc:"Accompagner les personnes âgées, en situation de handicap ou en perte d'autonomie dans les actes essentiels de la vie quotidienne, à leur domicile.",
+     blocs:["Accompagner les actes essentiels du quotidien (toilette, repas, déplacements)","Soutenir les activités de la vie sociale et relationnelle","Assister les parents dans la prise en charge des enfants","Entretenir le cadre de vie et contribuer au maintien de l'autonomie"]}
+  ]}
+];
+
+function renderFormations(){
+  var html='';
+  formations.forEach(function(cat){
+    html+='<div class="cat-title">'+cat.cat+'</div>';
+    cat.items.forEach(function(f,i){
+      var id='f'+i+'_'+cat.cat.replace(/\W/g,'');
+      var modBadges=f.mod.map(function(m){
+        return m==='alternance'
+          ?'<span class="badge alt">🔄 Alternance</span>'
+          :'<span class="badge cont">📚 Continue</span>';
+      }).join(' ');
+      var stars='';
+      for(var s=1;s<=5;s++) stars+=s<=f.niv?'★':'☆';
+      html+='<div class="f-card" onclick="toggleF(\''+id+'\')">';
+      html+='<div class="f-head"><h4>'+f.name+'</h4><div class="f-right"><span class="badge '+(f.st==='dispo'?'dispo':'bientot')+'">'+(f.st==='dispo'?'Disponible':'Bientôt')+'</span><span class="chev" id="chev-'+id+'">▼</span></div></div>';
+      html+='<div class="synop">';
+      html+='<div class="synop-item"><span>⭐</span><strong>Niv. '+f.niv+'</strong><span style="color:var(--gold);font-size:10px">'+stars+'</span></div>';
+      html+='<div class="synop-item">⏱ <strong>~'+f.h+'h</strong><span>centre</span></div>';
+      html+='<div class="synop-item">⌛ <strong>'+f.duree+'</strong></div>';
+      html+='</div>';
+      html+='<div class="synop" style="padding-top:0">'+modBadges+'</div>';
+      html+='<div class="f-det" id="'+id+'">';
+      html+='<p class="f-desc">'+f.desc+'</p>';
+      html+='<div class="blocs-title">📋 Blocs de compétences</div>';
+      html+='<div style="margin-bottom:10px">';
+      f.blocs.forEach(function(b,bi){
+        html+='<div class="bloc-item"><span class="bloc-num">B'+(bi+1)+'</span><span>'+b+'</span></div>';
+      });
+      html+='</div>';
+      html+='<div class="f-meta">';
+      html+='<div class="f-meta-item"><label>👤 Public</label><span>'+f.public+'</span></div>';
+      html+='<div class="f-meta-item"><label>🎯 Débouchés</label><span>'+f.deb+'</span></div>';
+      html+='</div></div></div>';
+    });
+  });
+  document.getElementById('formations-list').innerHTML=html;
+}
+
+function toggleF(id){
+  var el=document.getElementById(id);
+  var chev=document.getElementById('chev-'+id);
+  if(el.classList.contains('open')){el.classList.remove('open');chev.style.transform='';}
+  else{el.classList.add('open');chev.style.transform='rotate(180deg)';}
+}
+
+function toggleModal(){
+  var el=document.getElementById('modal-body');
+  var chev=document.getElementById('modal-chev');
+  if(el.classList.contains('open')){el.classList.remove('open');chev.style.transform='';}
+  else{el.classList.add('open');chev.style.transform='rotate(180deg)';}
+}
+
+function toggleLang(){
+  lang=lang==='fr'?'cr':'fr';
+  document.querySelectorAll('.t').forEach(function(el){var v=el.getAttribute('data-'+lang);if(v)el.textContent=v;});
+}
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function envoyerRDV(){
+  var nom=document.getElementById('nom').value.trim();
+  var prenom=document.getElementById('prenom').value.trim();
+  var tel=document.getElementById('tel').value.trim();
+  var ddn=document.getElementById('ddn').value;
+  var sit=document.getElementById('situation').value;
+  var form=document.getElementById('formation').value;
+  var msg=document.getElementById('message').value.trim();
+  if(!nom||!prenom||!tel||!ddn||!sit||!form){alert('Merci de remplir tous les champs obligatoires (*).');return;}
+  var age='';if(ddn){var d=new Date(ddn),now=new Date();age=Math.floor((now-d)/31557600000)+' ans';}
+  var corps='Nouvelle demande de rendez-vous — JTCF\n\nNom : '+nom+'\nPrénom : '+prenom+'\nTéléphone : '+tel+'\nDate de naissance : '+ddn+(age?' ('+age+')':'')+'\nSituation : '+sit+'\nFormation souhaitée : '+form+(msg?'\n\nMessage :\n'+msg:'')+'\n\n---\nEnvoyé depuis l\'application JTCF';
+  window.location.href='mailto:contact@tbrgroup.fr?subject='+encodeURIComponent('Demande de RDV — '+prenom+' '+nom)+'&body='+encodeURIComponent(corps);
+  document.getElementById('form-container').style.display='none';
+  document.getElementById('success').style.display='block';
+}
+
+function resetForm(){
+  ['nom','prenom','tel','message'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('ddn').value='';
+  document.getElementById('situation').value='';
+  document.getElementById('formation').value='';
+  document.getElementById('form-container').style.display='block';
+  document.getElementById('success').style.display='none';
+}
+
+formations.forEach(function(cat){cat.items.forEach(function(f){f.mod=["continue","alternance"];});});
+renderFormations();
+document.querySelectorAll('.t').forEach(function(el){var v=el.getAttribute('data-fr');if(v)el.textContent=v;});
+</script>
+</body>
+</html>
