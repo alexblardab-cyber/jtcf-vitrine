@@ -33,8 +33,8 @@ body{background:var(--dark);color:var(--text);min-height:100vh;max-width:420px;m
 .cat-title{font-size:11px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.6px;margin:16px 0 8px}
 .cat-title:first-child{margin-top:0}
 /* Formation card */
-.f-card{background:var(--card);border:1px solid var(--dark3);border-radius:12px;margin-bottom:8px;overflow:hidden;cursor:pointer}
-.f-head{padding:12px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.f-card{background:var(--card);border:1px solid var(--dark3);border-radius:12px;margin-bottom:8px;overflow:hidden}
+.f-head{padding:12px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;cursor:pointer}
 .f-head h4{font-size:13px;font-weight:500;color:var(--text);line-height:1.4;flex:1}
 .f-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
 .badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;white-space:nowrap}
@@ -94,12 +94,35 @@ textarea{resize:vertical;min-height:75px}
 .success-box p{color:var(--muted);font-size:13px;line-height:1.5}
 .rdv-btn{background:var(--card);border:1px solid var(--dark3);border-radius:12px;padding:14px;text-align:center;cursor:pointer;margin-top:6px}
 .nota{background:var(--dark2);border-left:3px solid var(--soon);border-radius:0 10px 10px 0;padding:10px 13px;margin-bottom:14px;font-size:12px;color:var(--muted);line-height:1.5}
+
+/* ── BOUTON TÉLÉCHARGER PROGRAMME ── */
+.dl-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:transparent;border:1px solid var(--gold);
+  color:var(--gold);border-radius:8px;
+  padding:7px 12px;font-size:11px;font-weight:700;
+  cursor:pointer;text-decoration:none;margin-top:10px;
+  transition:background .18s,color .18s;
+}
+.dl-btn:hover{background:var(--gold);color:#1a1a00;}
+
+
+/* ── BADGE QUALIOPI sur fiche formation ── */
+.qualiopi-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:#1a2a1a;border:1px solid #2a4a2a;
+  border-radius:8px;padding:5px 9px;
+  font-size:10px;color:#7ec87e;font-weight:600;
+  margin-top:8px;
+}
 </style>
 </head>
 <body>
 
+<!-- ══════════ ACCUEIL ══════════ -->
 <div id="accueil" class="screen active">
-  <div class="tb"><div class="tb-logo"><svg viewBox="0 0 80 80" width="38" height="38"><rect width="80" height="80" fill="white"/><text x="40" y="18" text-anchor="middle" fill="#C9A020" font-size="13" font-family="serif">★ ★ ★</text><text x="40" y="52" text-anchor="middle" fill="#C9A020" font-size="30" font-family="Georgia,serif" font-style="italic">JT</text><text x="40" y="63" text-anchor="middle" fill="#C9A020" font-size="8" font-family="sans-serif" letter-spacing="2">CONSEIL</text><text x="40" y="73" text-anchor="middle" fill="#C9A020" font-size="7" font-family="sans-serif" letter-spacing="2">FORMATION</text></svg></div>
+  <div class="tb">
+    <div class="tb-logo"><svg viewBox="0 0 80 80" width="38" height="38"><rect width="80" height="80" fill="white"/><text x="40" y="18" text-anchor="middle" fill="#C9A020" font-size="13" font-family="serif">★ ★ ★</text><text x="40" y="52" text-anchor="middle" fill="#C9A020" font-size="30" font-family="Georgia,serif" font-style="italic">JT</text><text x="40" y="63" text-anchor="middle" fill="#C9A020" font-size="8" font-family="sans-serif" letter-spacing="2">CONSEIL</text><text x="40" y="73" text-anchor="middle" fill="#C9A020" font-size="7" font-family="sans-serif" letter-spacing="2">FORMATION</text></svg></div>
     <div style="flex:1"><h1>JT Conseil Formation</h1><div class="tb-sub">Centre de formation — La Réunion</div></div>
     <button class="lang-btn" onclick="toggleLang()">CR / FR</button>
   </div>
@@ -108,10 +131,23 @@ textarea{resize:vertical;min-height:75px}
       <h2 class="t" data-fr="Bienvenue chez JTCF" data-cr="Bienveni dann JTCF"></h2>
       <p class="t" data-fr="Construisez votre avenir professionnel avec nos formations certifiantes et nos dispositifs d'alternance à La Réunion." data-cr="Konstri zot lavenir profesionèl èk nout formations certifiantes La Rényon."></p>
     </div>
+
     <div class="cta-grid">
       <div class="cta-card" onclick="show('formations')"><div class="icon">📚</div><h3 class="t" data-fr="Nos formations" data-cr="Nout formations"></h3></div>
       <div class="cta-card" onclick="show('preinscription')"><div class="icon">📅</div><h3 class="t" data-fr="Prendre un RDV" data-cr="Pran in randev"></h3></div>
       <div class="cta-card" onclick="show('sites')"><div class="icon">📍</div><h3 class="t" data-fr="Nous trouver" data-cr="Trouv nou"></h3></div>
+      <a class="cta-card" href="./docs/certificat-qualiopi.pdf" download="Certificat-Qualiopi-JTCF.pdf" style="text-decoration:none;border-color:#003189">
+        <div class="icon">
+          <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <rect width="48" height="48" rx="8" fill="#003189"/>
+            <text x="24" y="13" text-anchor="middle" fill="#fff" font-size="6" font-family="sans-serif" font-weight="700" letter-spacing="0.5">QUALIOPI</text>
+            <rect x="13" y="16" width="22" height="22" rx="2" fill="none" stroke="#fff" stroke-width="2"/>
+            <rect x="18" y="21" width="12" height="12" rx="1" fill="#C9A020"/>
+            <text x="24" y="30" text-anchor="middle" fill="#fff" font-size="9" font-family="serif">★</text>
+          </svg>
+        </div>
+        <h3 style="color:var(--text);font-size:12px;font-weight:600;line-height:1.4">Certifié<br>Qualiopi ⬇</h3>
+      </a>
     </div>
     <div class="info-box">
       <h4 class="t" data-fr="Contact" data-cr="Kontakt"></h4>
@@ -123,8 +159,10 @@ textarea{resize:vertical;min-height:75px}
   </div>
 </div>
 
+<!-- ══════════ FORMATIONS ══════════ -->
 <div id="formations" class="screen">
-  <div class="tb"><div class="tb-logo"><svg viewBox="0 0 80 80" width="38" height="38"><rect width="80" height="80" fill="white"/><text x="40" y="18" text-anchor="middle" fill="#C9A020" font-size="13" font-family="serif">★ ★ ★</text><text x="40" y="52" text-anchor="middle" fill="#C9A020" font-size="30" font-family="Georgia,serif" font-style="italic">JT</text><text x="40" y="63" text-anchor="middle" fill="#C9A020" font-size="8" font-family="sans-serif" letter-spacing="2">CONSEIL</text><text x="40" y="73" text-anchor="middle" fill="#C9A020" font-size="7" font-family="sans-serif" letter-spacing="2">FORMATION</text></svg></div>
+  <div class="tb">
+    <div class="tb-logo"><svg viewBox="0 0 80 80" width="38" height="38"><rect width="80" height="80" fill="white"/><text x="40" y="18" text-anchor="middle" fill="#C9A020" font-size="13" font-family="serif">★ ★ ★</text><text x="40" y="52" text-anchor="middle" fill="#C9A020" font-size="30" font-family="Georgia,serif" font-style="italic">JT</text><text x="40" y="63" text-anchor="middle" fill="#C9A020" font-size="8" font-family="sans-serif" letter-spacing="2">CONSEIL</text><text x="40" y="73" text-anchor="middle" fill="#C9A020" font-size="7" font-family="sans-serif" letter-spacing="2">FORMATION</text></svg></div>
     <div style="flex:1"><h1 class="t" data-fr="Nos formations" data-cr="Nout formations"></h1></div>
     <button class="lang-btn" onclick="toggleLang()">CR / FR</button>
     <button class="back" onclick="show('accueil')">← <span class="t" data-fr="Retour" data-cr="Rétour"></span></button>
@@ -169,8 +207,10 @@ textarea{resize:vertical;min-height:75px}
   </div>
 </div>
 
+<!-- ══════════ SITES ══════════ -->
 <div id="sites" class="screen">
-  <div class="tb"><div class="tb-logo"><svg viewBox="0 0 80 80" width="38" height="38"><rect width="80" height="80" fill="white"/><text x="40" y="18" text-anchor="middle" fill="#C9A020" font-size="13" font-family="serif">★ ★ ★</text><text x="40" y="52" text-anchor="middle" fill="#C9A020" font-size="30" font-family="Georgia,serif" font-style="italic">JT</text><text x="40" y="63" text-anchor="middle" fill="#C9A020" font-size="8" font-family="sans-serif" letter-spacing="2">CONSEIL</text><text x="40" y="73" text-anchor="middle" fill="#C9A020" font-size="7" font-family="sans-serif" letter-spacing="2">FORMATION</text></svg></div>
+  <div class="tb">
+    <div class="tb-logo"><svg viewBox="0 0 80 80" width="38" height="38"><rect width="80" height="80" fill="white"/><text x="40" y="18" text-anchor="middle" fill="#C9A020" font-size="13" font-family="serif">★ ★ ★</text><text x="40" y="52" text-anchor="middle" fill="#C9A020" font-size="30" font-family="Georgia,serif" font-style="italic">JT</text><text x="40" y="63" text-anchor="middle" fill="#C9A020" font-size="8" font-family="sans-serif" letter-spacing="2">CONSEIL</text><text x="40" y="73" text-anchor="middle" fill="#C9A020" font-size="7" font-family="sans-serif" letter-spacing="2">FORMATION</text></svg></div>
     <div style="flex:1"><h1 class="t" data-fr="Nous trouver" data-cr="Trouv nou"></h1></div>
     <button class="lang-btn" onclick="toggleLang()">CR / FR</button>
     <button class="back" onclick="show('accueil')">← <span class="t" data-fr="Retour" data-cr="Rétour"></span></button>
@@ -193,8 +233,10 @@ textarea{resize:vertical;min-height:75px}
   </div>
 </div>
 
+<!-- ══════════ PRÉ-INSCRIPTION ══════════ -->
 <div id="preinscription" class="screen">
-  <div class="tb"><div class="tb-logo"><svg viewBox="0 0 80 80" width="38" height="38"><rect width="80" height="80" fill="white"/><text x="40" y="18" text-anchor="middle" fill="#C9A020" font-size="13" font-family="serif">★ ★ ★</text><text x="40" y="52" text-anchor="middle" fill="#C9A020" font-size="30" font-family="Georgia,serif" font-style="italic">JT</text><text x="40" y="63" text-anchor="middle" fill="#C9A020" font-size="8" font-family="sans-serif" letter-spacing="2">CONSEIL</text><text x="40" y="73" text-anchor="middle" fill="#C9A020" font-size="7" font-family="sans-serif" letter-spacing="2">FORMATION</text></svg></div>
+  <div class="tb">
+    <div class="tb-logo"><svg viewBox="0 0 80 80" width="38" height="38"><rect width="80" height="80" fill="white"/><text x="40" y="18" text-anchor="middle" fill="#C9A020" font-size="13" font-family="serif">★ ★ ★</text><text x="40" y="52" text-anchor="middle" fill="#C9A020" font-size="30" font-family="Georgia,serif" font-style="italic">JT</text><text x="40" y="63" text-anchor="middle" fill="#C9A020" font-size="8" font-family="sans-serif" letter-spacing="2">CONSEIL</text><text x="40" y="73" text-anchor="middle" fill="#C9A020" font-size="7" font-family="sans-serif" letter-spacing="2">FORMATION</text></svg></div>
     <div style="flex:1"><h1 class="t" data-fr="Prendre un RDV" data-cr="Pran in randev"></h1></div>
     <button class="lang-btn" onclick="toggleLang()">CR / FR</button>
     <button class="back" onclick="show('accueil')">← <span class="t" data-fr="Retour" data-cr="Rétour"></span></button>
@@ -221,9 +263,9 @@ textarea{resize:vertical;min-height:75px}
           <option value="">--</option>
           <optgroup label="Commerce"><option>TP Manager des Établissements Marchands</option><option>TP Conseiller de Vente</option><option>TP Assistant Commercial</option><option>TP Responsable des Établissements Marchands</option><option>TP Employé Commercial</option></optgroup>
           <optgroup label="Administration"><option>TP Chargé d'Accueil et de Gestion Administrative</option><option>TP Secrétaire Comptable</option><option>TP Secrétaire Assistant Médico-Administrative</option><option>TP Assistant de Direction</option><option>TP Assistant Ressource Humaine (ARH)</option></optgroup>
-          <optgroup label="Médiation"><option>TP Agent de Médiation Information Services (bientôt)</option><option>TP Conseiller en Insertion Professionnelle</option></optgroup>
-          <optgroup label="Tourisme"><option>TP Chargé d'Accueil Touristique et de Loisirs</option><option>TP Guide Accompagnateur Touristique</option></optgroup>
-          <optgroup label="Aide à la personne"><option>TP Responsable Coordinateur Services au Domicile</option><option>TP Assistant de Vie aux Familles (bientôt)</option></optgroup>
+          <optgroup label="Médiation"><option>TP Agent de Médiation Information Services (bientôt)</option><option>TP Conseiller en Insertion Professionnelle (bientôt)</option></optgroup>
+          <optgroup label="Tourisme"><option>TP Chargé d'Accueil Touristique et de Loisirs (bientôt)</option><option>TP Guide Accompagnateur Touristique (bientôt)</option></optgroup>
+          <optgroup label="Aide à la personne"><option>TP Responsable Coordinateur Services au Domicile (bientôt)</option><option>TP Assistant de Vie aux Familles (bientôt)</option></optgroup>
           <optgroup label="Alternance"><option>Alternance / Apprentissage (Commerce)</option><option>Alternance / Apprentissage (Administration)</option></optgroup>
         </select>
       </div>
@@ -243,29 +285,39 @@ textarea{resize:vertical;min-height:75px}
 <script>
 var lang='fr';
 
+// ═══════════════════════════════════════════════════════════
+// DONNÉES FORMATIONS
+// Chaque formation a un champ "pdf" → chemin vers le programme
+// Remplace les chemins par tes vrais fichiers dans /docs/
+// ═══════════════════════════════════════════════════════════
 var formations=[
   {cat:"🛍️ Commerce",items:[
     {name:"TP Employé Commercial",st:"dispo",niv:3,h:343,
+     pdf:"./docs/programme-employe-commercial.pdf",
      mod:["continue","alternance"],
      duree:"4-5 mois",public:"Tout public, débutant accepté",deb:"Employé commercial, hôte/hôtesse de caisse, vendeur en surface de vente",
      desc:"Réaliser les opérations de mise en rayon, d'accueil et d'encaissement dans un commerce de détail ou en grande surface.",
      blocs:["Approvisionner et présenter le rayon en respectant les règles de merchandising","Orienter et renseigner le client en surface de vente","Réaliser les opérations d'encaissement et gérer les flux"]},
     {name:"TP Conseiller de Vente",st:"dispo",niv:4,h:450,
+     pdf:"./docs/programme-conseiller-vente.pdf",
      mod:["continue","alternance"],
      duree:"6-8 mois",public:"Niveau 3e, tout public",deb:"Vendeur conseil, conseiller commercial, animateur des ventes",
      desc:"Développer une relation client de qualité, maîtriser les techniques de vente et contribuer à la performance commerciale d'un point de vente.",
      blocs:["Développer sa connaissance des produits et services pour mieux conseiller","Mener un entretien de vente et proposer des ventes complémentaires","Fidéliser la clientèle et contribuer à l'animation du rayon","Assurer le suivi de son activité et des indicateurs commerciaux"]},
     {name:"TP Assistant Commercial",st:"dispo",niv:4,h:420,
+     pdf:"./docs/programme-assistant-commercial.pdf",
      mod:["continue"],
      duree:"7-8 mois",public:"Niveau Bac, tout public",deb:"Assistant commercial, chargé de clientèle, assistant ADV",
      desc:"Assurer le support commercial et administratif d'une équipe de vente, gérer la relation client multicanale et contribuer au développement du portefeuille.",
      blocs:["Prospecter et développer un portefeuille clients","Gérer les commandes et assurer le suivi administratif des ventes","Assurer la relation client à distance (téléphone, e-mail, réseaux)","Produire des tableaux de bord et contribuer au reporting commercial"]},
     {name:"TP Manager des Établissements Marchands",st:"dispo",niv:5,h:560,
+     pdf:"./docs/programme-manager-etablissements-marchands.pdf",
      mod:["continue","alternance"],
      duree:"10-12 mois",public:"Niveau Bac, expérience commerce appréciée",deb:"Manager de rayon, responsable de magasin, adjoint de direction",
      desc:"Encadrer et animer une équipe commerciale, piloter les indicateurs de performance et assurer la dynamique commerciale d'un point de vente.",
      blocs:["Animer et manager une équipe commerciale au quotidien","Piloter l'activité commerciale et les indicateurs de performance","Organiser la mise en valeur des produits et les opérations promotionnelles","Assurer la gestion administrative et RH de l'unité marchande"]},
     {name:"TP Responsable des Établissements Marchands",st:"dispo",niv:5,h:560,
+     pdf:"./docs/programme-responsable-etablissements-marchands.pdf",
      mod:["continue"],
      duree:"10-12 mois",public:"Niveau Bac+2 ou expérience significative",deb:"Directeur de magasin, responsable de site, chef de département",
      desc:"Diriger un établissement commercial, développer le chiffre d'affaires, encadrer les équipes et garantir la rentabilité du point de vente.",
@@ -273,62 +325,73 @@ var formations=[
   ]},
   {cat:"🗂️ Administration",items:[
     {name:"TP Chargé d'Accueil et de Gestion Administrative",st:"dispo",niv:4,h:550,
+     pdf:"./docs/programme-charge-accueil-gestion-administrative.pdf",
      mod:["continue","alternance"],
      duree:"7-9 mois",public:"Niveau 3e, tout public",deb:"Secrétaire, assistant administratif, agent d'accueil, chargé de gestion",
      desc:"Assurer l'accueil physique et téléphonique, traiter les documents administratifs et coordonner les activités de secrétariat d'une structure.",
      blocs:["Assurer l'accueil physique et téléphonique et orienter les interlocuteurs","Traiter les courriers, e-mails et documents administratifs courants","Gérer les agendas, réunions et déplacements","Utiliser les outils bureautiques et les logiciels métiers"]},
     {name:"TP Secrétaire Comptable",st:"dispo",niv:4,h:490,
+     pdf:"./docs/programme-secretaire-comptable.pdf",
      mod:["continue"],
      duree:"8-9 mois",public:"Niveau 3e, affinité pour les chiffres",deb:"Secrétaire comptable, aide-comptable, assistant de gestion",
      desc:"Réaliser les opérations de comptabilité générale courante et assurer les tâches de secrétariat d'une PME ou d'un cabinet.",
      blocs:["Saisir et contrôler les opérations comptables courantes","Établir les déclarations fiscales et sociales de base","Assurer le suivi de la trésorerie et des règlements","Produire des documents administratifs et gérer les courriers"]},
     {name:"TP Secrétaire Assistant Médico-Administrative",st:"dispo",niv:4,h:490,
+     pdf:"./docs/programme-secretaire-medico-administrative.pdf",
      mod:["continue"],
      duree:"8-9 mois",public:"Tout public, intérêt pour le secteur santé",deb:"Secrétaire médicale, agent administratif hospitalier, assistant de soins",
      desc:"Assurer l'accueil des patients, gérer les dossiers médicaux et administratifs et assurer la coordination avec les professionnels de santé.",
      blocs:["Accueillir et orienter les patients en structure de santé","Gérer les dossiers médicaux et les données de santé dans le respect du secret médical","Planifier les rendez-vous et coordonner les soins","Assurer la facturation et le suivi des remboursements (CPAM, mutuelles)"]},
     {name:"TP Assistant de Direction",st:"dispo",niv:5,h:450,
+     pdf:"./docs/programme-assistant-direction.pdf",
      mod:["continue","alternance"],
      duree:"6-8 mois",public:"Niveau Bac, maîtrise bureautique",deb:"Assistant de direction, office manager, assistant exécutif",
      desc:"Assister un cadre dirigeant dans l'organisation de son activité, la gestion des communications et la coordination administrative de son service.",
      blocs:["Organiser l'agenda, les déplacements et les réunions du dirigeant","Assurer la communication interne et externe (courriers, comptes rendus, présentations)","Gérer les dossiers sensibles et les informations confidentielles","Coordonner les activités administratives du service et superviser les prestataires"]},
     {name:"TP Assistant Ressource Humaine (ARH)",st:"dispo",niv:5,h:490,
+     pdf:"./docs/programme-assistant-rh.pdf",
      mod:["continue"],
      duree:"9-10 mois",public:"Niveau Bac, intérêt pour les relations humaines",deb:"Assistant RH, chargé de missions RH, gestionnaire paie junior",
      desc:"Participer à la gestion administrative du personnel, au recrutement, à la formation et au développement des compétences au sein d'une organisation.",
-     blocs:["Assurer l'administration du personnel (contrats, absences, paie de base)","Participer au recrutement et à l'intégration des nouveaux collaborateurs","Contribuer au plan de formation et au suivi des compétences","Informer les salariés sur leurs droits et obligations (droit du travail)"]},
+     blocs:["Assurer l'administration du personnel (contrats, absences, paie de base)","Participer au recrutement et à l'intégration des nouveaux collaborateurs","Contribuer au plan de formation et au suivi des compétences","Informer les salariés sur leurs droits et obligations (droit du travail)"]}
   ]},
   {cat:"🤝 Médiation",items:[
     {name:"TP Agent de Médiation Information Services",st:"bientot",niv:4,h:385,
+     pdf:"./docs/programme-agent-mediation.pdf",
      mod:["continue"],
      duree:"6-8 mois",public:"Tout public, sens du relationnel",deb:"Médiateur social, agent de prévention, chargé d'information usagers",
      desc:"Faciliter le lien entre les usagers et les services publics ou associatifs, prévenir et gérer les conflits, et orienter les publics vers les dispositifs adaptés.",
      blocs:["Accueillir et orienter les usagers dans leurs démarches administratives","Faciliter le dialogue et prévenir les situations conflictuelles","Informer sur les droits et les dispositifs d'aide","Développer des actions de médiation sur le territoire"]},
-    {name:"TP Conseiller en Insertion Professionnelle",st:"dispo",niv:5,h:560,
+    {name:"TP Conseiller en Insertion Professionnelle",st:"bientot",niv:5,h:560,
+     pdf:"./docs/programme-cip.pdf",
      mod:["continue"],
      duree:"10-11 mois",public:"Expérience ou fort intérêt pour l'accompagnement humain",deb:"CIP, conseiller emploi, chargé d'insertion, référent parcours",
      desc:"Accompagner les personnes en recherche d'emploi ou de reconversion vers la construction et la réalisation d'un projet professionnel réaliste et durable.",
      blocs:["Accueillir et réaliser un diagnostic global de la situation de la personne","Accompagner l'élaboration et la mise en œuvre du projet professionnel","Animer des ateliers collectifs (CV, entretien, techniques de recherche d'emploi)","Développer et entretenir les partenariats avec les employeurs et acteurs de l'insertion"]}
   ]},
   {cat:"🌴 Tourisme",items:[
-    {name:"TP Chargé d'Accueil Touristique et de Loisirs",st:"dispo",niv:4,h:420,
+    {name:"TP Chargé d'Accueil Touristique et de Loisirs",st:"bientot",niv:4,h:420,
+     pdf:"./docs/programme-accueil-touristique.pdf",
      mod:["continue"],
      duree:"7-8 mois",public:"Tout public, sens de l'accueil, langues appréciées",deb:"Agent d'accueil touristique, animateur de loisirs, chargé d'information touristique",
      desc:"Accueillir et informer les visiteurs dans les structures touristiques, organiser et animer des activités de loisirs, et valoriser les richesses du territoire réunionnais.",
      blocs:["Accueillir et informer les visiteurs en français et en langue étrangère","Promouvoir les offres touristiques et les sites du territoire","Organiser et animer des activités et séjours de loisirs","Assurer la gestion administrative et commerciale de la structure"]},
-    {name:"TP Guide Accompagnateur Touristique",st:"dispo",niv:4,h:450,
+    {name:"TP Guide Accompagnateur Touristique",st:"bientot",niv:4,h:450,
+     pdf:"./docs/programme-guide-touristique.pdf",
      mod:["continue"],
      duree:"7-8 mois",public:"Bonne connaissance du territoire réunionnais",deb:"Guide touristique, accompagnateur de groupe, animateur patrimonial",
      desc:"Encadrer et guider des groupes lors de visites culturelles, patrimoniales ou naturelles, en valorisant les richesses de La Réunion.",
      blocs:["Préparer et organiser des circuits et visites guidées","Animer des visites en valorisant la culture, la nature et le patrimoine réunionnais","Assurer la sécurité et le bien-être des groupes accompagnés","Gérer la logistique et les aspects administratifs des tours"]}
   ]},
   {cat:"💙 Aide à la personne",items:[
-    {name:"TP Responsable Coordinateur Services au Domicile",st:"dispo",niv:5,h:490,
+    {name:"TP Responsable Coordinateur Services au Domicile",st:"bientot",niv:5,h:490,
+     pdf:"./docs/programme-responsable-coordinateur-domicile.pdf",
      mod:["continue"],
      duree:"9-10 mois",public:"Expérience dans le secteur médico-social requise",deb:"Coordinateur de services à domicile, responsable de secteur, chef d'équipe SAP",
      desc:"Coordonner les interventions des équipes à domicile, gérer les plannings, assurer la qualité du service et développer les partenariats avec les acteurs du maintien à domicile.",
      blocs:["Évaluer les besoins des bénéficiaires et organiser les interventions à domicile","Manager et encadrer les équipes d'auxiliaires de vie","Assurer la qualité du service et la conformité réglementaire","Développer les partenariats avec les acteurs sanitaires et sociaux du territoire"]},
     {name:"TP Assistant de Vie aux Familles",st:"bientot",niv:3,h:280,
+     pdf:"./docs/programme-assistant-vie-familles.pdf",
      mod:["continue"],
      duree:"4-6 mois",public:"Tout public, empathie et bienveillance requises",deb:"Auxiliaire de vie sociale, aide à domicile, assistant familial, ADVF",
      desc:"Accompagner les personnes âgées, en situation de handicap ou en perte d'autonomie dans les actes essentiels de la vie quotidienne, à leur domicile.",
@@ -349,14 +412,20 @@ function renderFormations(){
       }).join(' ');
       var stars='';
       for(var s=1;s<=5;s++) stars+=s<=f.niv?'★':'☆';
-      html+='<div class="f-card" onclick="toggleF(\''+id+'\')">';
-      html+='<div class="f-head"><h4>'+f.name+'</h4><div class="f-right"><span class="badge '+(f.st==='dispo'?'dispo':'bientot')+'">'+(f.st==='dispo'?'Disponible':'Bientôt')+'</span><span class="chev" id="chev-'+id+'">▼</span></div></div>';
+
+      html+='<div class="f-card">';
+      html+='<div class="f-head" onclick="toggleF(\''+id+'\')">';
+      html+='<h4>'+f.name+'</h4>';
+      html+='<div class="f-right"><span class="badge '+(f.st==='dispo'?'dispo':'bientot')+'">'+(f.st==='dispo'?'Disponible':'Bientôt')+'</span><span class="chev" id="chev-'+id+'">▼</span></div>';
+      html+='</div>';
+
       html+='<div class="synop">';
       html+='<div class="synop-item"><span>⭐</span><strong>Niv. '+f.niv+'</strong><span style="color:var(--gold);font-size:10px">'+stars+'</span></div>';
       html+='<div class="synop-item">⏱ <strong>~'+f.h+'h</strong><span>centre</span></div>';
       html+='<div class="synop-item">⌛ <strong>'+f.duree+'</strong></div>';
       html+='</div>';
       html+='<div class="synop" style="padding-top:0">'+modBadges+'</div>';
+
       html+='<div class="f-det" id="'+id+'">';
       html+='<p class="f-desc">'+f.desc+'</p>';
       html+='<div class="blocs-title">📋 Blocs de compétences</div>';
@@ -368,7 +437,17 @@ function renderFormations(){
       html+='<div class="f-meta">';
       html+='<div class="f-meta-item"><label>👤 Public</label><span>'+f.public+'</span></div>';
       html+='<div class="f-meta-item"><label>🎯 Débouchés</label><span>'+f.deb+'</span></div>';
-      html+='</div></div></div>';
+      html+='</div>';
+
+      // ── Badge Qualiopi + bouton télécharger programme ──
+      html+='<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:10px">';
+      html+='<span class="qualiopi-badge"><svg width="14" height="14" viewBox="0 0 48 48" style="flex-shrink:0"><rect width="48" height="48" rx="6" fill="#003189"/><rect x="13" y="18" width="22" height="22" rx="2" fill="none" stroke="#fff" stroke-width="2"/><rect x="18" y="23" width="12" height="12" rx="1" fill="#C9A020"/><text x="24" y="32" text-anchor="middle" fill="#fff" font-size="9" font-family="serif">★</text></svg> Certifié Qualiopi</span>';
+      if(f.pdf){
+        html+='<a class="dl-btn" href="'+f.pdf+'" download>⬇ Programme PDF</a>';
+      }
+      html+='</div>';
+
+      html+='</div></div>';
     });
   });
   document.getElementById('formations-list').innerHTML=html;
@@ -424,7 +503,6 @@ function resetForm(){
   document.getElementById('success').style.display='none';
 }
 
-formations.forEach(function(cat){cat.items.forEach(function(f){f.mod=["continue","alternance"];});});
 renderFormations();
 document.querySelectorAll('.t').forEach(function(el){var v=el.getAttribute('data-fr');if(v)el.textContent=v;});
 </script>
