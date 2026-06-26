@@ -136,7 +136,7 @@ textarea{resize:vertical;min-height:75px}
       <div class="cta-card" onclick="show('formations')"><div class="icon">📚</div><h3 class="t" data-fr="Nos formations" data-cr="Nout formations"></h3></div>
       <div class="cta-card" onclick="show('preinscription')"><div class="icon">📅</div><h3 class="t" data-fr="Prendre un RDV" data-cr="Pran in randev"></h3></div>
       <div class="cta-card" onclick="show('sites')"><div class="icon">📍</div><h3 class="t" data-fr="Nous trouver" data-cr="Trouv nou"></h3></div>
-      <a class="cta-card" href="./docs/certificat-qualiopi.pdf" download="Certificat-Qualiopi-JTCF.pdf" style="text-decoration:none;border-color:#003189">
+      <a class="cta-card" href="./docs/24FOR03576.1 - Certificat de conformité.pdf" download="Certificat-Qualiopi-JTCF.pdf" style="text-decoration:none;border-color:#003189">
         <div class="icon">
           <svg width="32" height="32" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
             <rect width="48" height="48" rx="8" fill="#003189"/>
@@ -262,7 +262,7 @@ textarea{resize:vertical;min-height:75px}
         <select id="formation">
           <option value="">--</option>
           <optgroup label="Commerce"><option>TP Manager des Établissements Marchands</option><option>TP Conseiller de Vente</option><option>TP Assistant Commercial</option><option>TP Responsable des Établissements Marchands</option><option>TP Employé Commercial</option></optgroup>
-          <optgroup label="Administration"><option>TP Chargé d'Accueil et de Gestion Administrative</option><option>TP Secrétaire Comptable</option><option>TP Secrétaire Assistant Médico-Administrative</option><option>TP Assistant de Direction</option><option>TP Assistant Ressource Humaine (ARH)</option></optgroup>
+          <optgroup label="Administration"><option>TP Chargé d'Accueil et de Gestion Administrative</option><option>TP Assistant(e) de Comptabilité et d'Administration</option><option>TP Secrétaire Assistant Médico-Administrative</option><option>TP Assistant de Direction</option><option>TP Assistant Ressource Humaine (ARH)</option></optgroup>
           <optgroup label="Médiation"><option>TP Agent de Médiation Information Services (bientôt)</option><option>TP Conseiller en Insertion Professionnelle (bientôt)</option></optgroup>
           <optgroup label="Tourisme"><option>TP Chargé d'Accueil Touristique et de Loisirs (bientôt)</option><option>TP Guide Accompagnateur Touristique (bientôt)</option></optgroup>
           <optgroup label="Aide à la personne"><option>TP Responsable Coordinateur Services au Domicile (bientôt)</option><option>TP Assistant de Vie aux Familles (bientôt)</option></optgroup>
@@ -293,31 +293,31 @@ var lang='fr';
 var formations=[
   {cat:"🛍️ Commerce",items:[
     {name:"TP Employé Commercial",st:"dispo",niv:3,h:343,
-     pdf:"./docs/programme-employe-commercial.pdf",
+     pdf:"./docs/TP EC.pdf",
      mod:["continue","alternance"],
      duree:"4-5 mois",public:"Tout public, débutant accepté",deb:"Employé commercial, hôte/hôtesse de caisse, vendeur en surface de vente",
      desc:"Réaliser les opérations de mise en rayon, d'accueil et d'encaissement dans un commerce de détail ou en grande surface.",
      blocs:["Approvisionner et présenter le rayon en respectant les règles de merchandising","Orienter et renseigner le client en surface de vente","Réaliser les opérations d'encaissement et gérer les flux"]},
     {name:"TP Conseiller de Vente",st:"dispo",niv:4,h:450,
-     pdf:"./docs/programme-conseiller-vente.pdf",
+     pdf:"./docs/TP Conseiller de Vente.pdf",
      mod:["continue","alternance"],
      duree:"6-8 mois",public:"Niveau 3e, tout public",deb:"Vendeur conseil, conseiller commercial, animateur des ventes",
      desc:"Développer une relation client de qualité, maîtriser les techniques de vente et contribuer à la performance commerciale d'un point de vente.",
      blocs:["Développer sa connaissance des produits et services pour mieux conseiller","Mener un entretien de vente et proposer des ventes complémentaires","Fidéliser la clientèle et contribuer à l'animation du rayon","Assurer le suivi de son activité et des indicateurs commerciaux"]},
     {name:"TP Assistant Commercial",st:"dispo",niv:4,h:420,
-     pdf:"./docs/programme-assistant-commercial.pdf",
+     pdf:"./docs/tp ACOM.pdf",
      mod:["continue"],
      duree:"7-8 mois",public:"Niveau Bac, tout public",deb:"Assistant commercial, chargé de clientèle, assistant ADV",
      desc:"Assurer le support commercial et administratif d'une équipe de vente, gérer la relation client multicanale et contribuer au développement du portefeuille.",
      blocs:["Prospecter et développer un portefeuille clients","Gérer les commandes et assurer le suivi administratif des ventes","Assurer la relation client à distance (téléphone, e-mail, réseaux)","Produire des tableaux de bord et contribuer au reporting commercial"]},
     {name:"TP Manager des Établissements Marchands",st:"dispo",niv:5,h:560,
-     pdf:"./docs/programme-manager-etablissements-marchands.pdf",
+     pdf:"./docs/TP MEM PROGRAMME.pdf",
      mod:["continue","alternance"],
      duree:"10-12 mois",public:"Niveau Bac, expérience commerce appréciée",deb:"Manager de rayon, responsable de magasin, adjoint de direction",
      desc:"Encadrer et animer une équipe commerciale, piloter les indicateurs de performance et assurer la dynamique commerciale d'un point de vente.",
      blocs:["Animer et manager une équipe commerciale au quotidien","Piloter l'activité commerciale et les indicateurs de performance","Organiser la mise en valeur des produits et les opérations promotionnelles","Assurer la gestion administrative et RH de l'unité marchande"]},
     {name:"TP Responsable des Établissements Marchands",st:"dispo",niv:5,h:560,
-     pdf:"./docs/programme-responsable-etablissements-marchands.pdf",
+     pdf:"",
      mod:["continue"],
      duree:"10-12 mois",public:"Niveau Bac+2 ou expérience significative",deb:"Directeur de magasin, responsable de site, chef de département",
      desc:"Diriger un établissement commercial, développer le chiffre d'affaires, encadrer les équipes et garantir la rentabilité du point de vente.",
@@ -325,31 +325,31 @@ var formations=[
   ]},
   {cat:"🗂️ Administration",items:[
     {name:"TP Chargé d'Accueil et de Gestion Administrative",st:"dispo",niv:4,h:550,
-     pdf:"./docs/programme-charge-accueil-gestion-administrative.pdf",
+     pdf:"./docs/TP CADGA_.pdf",
      mod:["continue","alternance"],
      duree:"7-9 mois",public:"Niveau 3e, tout public",deb:"Secrétaire, assistant administratif, agent d'accueil, chargé de gestion",
      desc:"Assurer l'accueil physique et téléphonique, traiter les documents administratifs et coordonner les activités de secrétariat d'une structure.",
      blocs:["Assurer l'accueil physique et téléphonique et orienter les interlocuteurs","Traiter les courriers, e-mails et documents administratifs courants","Gérer les agendas, réunions et déplacements","Utiliser les outils bureautiques et les logiciels métiers"]},
-    {name:"TP Secrétaire Comptable",st:"dispo",niv:4,h:490,
-     pdf:"./docs/programme-secretaire-comptable.pdf",
+    {name:"TP Assistant(e) de Comptabilité et d'Administration",st:"dispo",niv:4,h:490,
+     pdf:"./docs/TP ASCA.pdf",
      mod:["continue"],
-     duree:"8-9 mois",public:"Niveau 3e, affinité pour les chiffres",deb:"Secrétaire comptable, aide-comptable, assistant de gestion",
-     desc:"Réaliser les opérations de comptabilité générale courante et assurer les tâches de secrétariat d'une PME ou d'un cabinet.",
+     duree:"8-9 mois",public:"Niveau 3e, affinité pour les chiffres",deb:"Assistant comptable, aide-comptable, assistant de gestion administrative",
+     desc:"Réaliser les opérations de comptabilité générale courante et assurer les tâches administratives d'une PME ou d'un cabinet (RNCP 38506).",
      blocs:["Saisir et contrôler les opérations comptables courantes","Établir les déclarations fiscales et sociales de base","Assurer le suivi de la trésorerie et des règlements","Produire des documents administratifs et gérer les courriers"]},
     {name:"TP Secrétaire Assistant Médico-Administrative",st:"dispo",niv:4,h:490,
-     pdf:"./docs/programme-secretaire-medico-administrative.pdf",
+     pdf:"./docs/TP SAMA.pdf",
      mod:["continue"],
      duree:"8-9 mois",public:"Tout public, intérêt pour le secteur santé",deb:"Secrétaire médicale, agent administratif hospitalier, assistant de soins",
      desc:"Assurer l'accueil des patients, gérer les dossiers médicaux et administratifs et assurer la coordination avec les professionnels de santé.",
      blocs:["Accueillir et orienter les patients en structure de santé","Gérer les dossiers médicaux et les données de santé dans le respect du secret médical","Planifier les rendez-vous et coordonner les soins","Assurer la facturation et le suivi des remboursements (CPAM, mutuelles)"]},
     {name:"TP Assistant de Direction",st:"dispo",niv:5,h:450,
-     pdf:"./docs/programme-assistant-direction.pdf",
+     pdf:"./docs/TP-Assistant-de-direction.pdf",
      mod:["continue","alternance"],
      duree:"6-8 mois",public:"Niveau Bac, maîtrise bureautique",deb:"Assistant de direction, office manager, assistant exécutif",
      desc:"Assister un cadre dirigeant dans l'organisation de son activité, la gestion des communications et la coordination administrative de son service.",
      blocs:["Organiser l'agenda, les déplacements et les réunions du dirigeant","Assurer la communication interne et externe (courriers, comptes rendus, présentations)","Gérer les dossiers sensibles et les informations confidentielles","Coordonner les activités administratives du service et superviser les prestataires"]},
     {name:"TP Assistant Ressource Humaine (ARH)",st:"dispo",niv:5,h:490,
-     pdf:"./docs/programme-assistant-rh.pdf",
+     pdf:"./docs/TP-Assistant-Ressources-Humaines.pdf",
      mod:["continue"],
      duree:"9-10 mois",public:"Niveau Bac, intérêt pour les relations humaines",deb:"Assistant RH, chargé de missions RH, gestionnaire paie junior",
      desc:"Participer à la gestion administrative du personnel, au recrutement, à la formation et au développement des compétences au sein d'une organisation.",
@@ -357,13 +357,13 @@ var formations=[
   ]},
   {cat:"🤝 Médiation",items:[
     {name:"TP Agent de Médiation Information Services",st:"bientot",niv:4,h:385,
-     pdf:"./docs/programme-agent-mediation.pdf",
+     pdf:"",
      mod:["continue"],
      duree:"6-8 mois",public:"Tout public, sens du relationnel",deb:"Médiateur social, agent de prévention, chargé d'information usagers",
      desc:"Faciliter le lien entre les usagers et les services publics ou associatifs, prévenir et gérer les conflits, et orienter les publics vers les dispositifs adaptés.",
      blocs:["Accueillir et orienter les usagers dans leurs démarches administratives","Faciliter le dialogue et prévenir les situations conflictuelles","Informer sur les droits et les dispositifs d'aide","Développer des actions de médiation sur le territoire"]},
     {name:"TP Conseiller en Insertion Professionnelle",st:"bientot",niv:5,h:560,
-     pdf:"./docs/programme-cip.pdf",
+     pdf:"./docs/TP-Conseiller-Insertion-Professionnelle.pdf",
      mod:["continue"],
      duree:"10-11 mois",public:"Expérience ou fort intérêt pour l'accompagnement humain",deb:"CIP, conseiller emploi, chargé d'insertion, référent parcours",
      desc:"Accompagner les personnes en recherche d'emploi ou de reconversion vers la construction et la réalisation d'un projet professionnel réaliste et durable.",
@@ -371,13 +371,13 @@ var formations=[
   ]},
   {cat:"🌴 Tourisme",items:[
     {name:"TP Chargé d'Accueil Touristique et de Loisirs",st:"bientot",niv:4,h:420,
-     pdf:"./docs/programme-accueil-touristique.pdf",
+     pdf:"./docs/TP-Charge-daccueil-touristique-et-de-loisirs-1.pdf",
      mod:["continue"],
      duree:"7-8 mois",public:"Tout public, sens de l'accueil, langues appréciées",deb:"Agent d'accueil touristique, animateur de loisirs, chargé d'information touristique",
      desc:"Accueillir et informer les visiteurs dans les structures touristiques, organiser et animer des activités de loisirs, et valoriser les richesses du territoire réunionnais.",
      blocs:["Accueillir et informer les visiteurs en français et en langue étrangère","Promouvoir les offres touristiques et les sites du territoire","Organiser et animer des activités et séjours de loisirs","Assurer la gestion administrative et commerciale de la structure"]},
     {name:"TP Guide Accompagnateur Touristique",st:"bientot",niv:4,h:450,
-     pdf:"./docs/programme-guide-touristique.pdf",
+     pdf:"./docs/TP Guide Accompagnateur Touristique.pdf",
      mod:["continue"],
      duree:"7-8 mois",public:"Bonne connaissance du territoire réunionnais",deb:"Guide touristique, accompagnateur de groupe, animateur patrimonial",
      desc:"Encadrer et guider des groupes lors de visites culturelles, patrimoniales ou naturelles, en valorisant les richesses de La Réunion.",
@@ -385,13 +385,13 @@ var formations=[
   ]},
   {cat:"💙 Aide à la personne",items:[
     {name:"TP Responsable Coordinateur Services au Domicile",st:"bientot",niv:5,h:490,
-     pdf:"./docs/programme-responsable-coordinateur-domicile.pdf",
+     pdf:"./docs/Fiche-action-RCSAD-V6-au-070323.pdf",
      mod:["continue"],
      duree:"9-10 mois",public:"Expérience dans le secteur médico-social requise",deb:"Coordinateur de services à domicile, responsable de secteur, chef d'équipe SAP",
      desc:"Coordonner les interventions des équipes à domicile, gérer les plannings, assurer la qualité du service et développer les partenariats avec les acteurs du maintien à domicile.",
      blocs:["Évaluer les besoins des bénéficiaires et organiser les interventions à domicile","Manager et encadrer les équipes d'auxiliaires de vie","Assurer la qualité du service et la conformité réglementaire","Développer les partenariats avec les acteurs sanitaires et sociaux du territoire"]},
     {name:"TP Assistant de Vie aux Familles",st:"bientot",niv:3,h:280,
-     pdf:"./docs/programme-assistant-vie-familles.pdf",
+     pdf:"./docs/ADVF.pdf",
      mod:["continue"],
      duree:"4-6 mois",public:"Tout public, empathie et bienveillance requises",deb:"Auxiliaire de vie sociale, aide à domicile, assistant familial, ADVF",
      desc:"Accompagner les personnes âgées, en situation de handicap ou en perte d'autonomie dans les actes essentiels de la vie quotidienne, à leur domicile.",
