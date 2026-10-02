@@ -9,18 +9,12 @@
      · le positionnement         → pour envoyer le résultat au bon référent
      · la vitrine                → pour afficher les coordonnées
 
-   ► LE JOUR OÙ LE RÉFÉRENT NORD A SON COMPTE
-     Dans le bloc 'nord' ci-dessous :
-       1. remplacer les « À COMPLÉTER » par les vraies informations
-       2. mettre  ouvert: true
-     Puis déposer ce fichier. Tout se met à jour partout, d'un coup :
-     la vitrine affiche l'adresse, le test route vers lui, et ses créneaux
-     deviennent réservables.
-
-     Tant que  ouvert  vaut false, l'antenne s'affiche en « bientôt » :
-     visible, mais aucun rendez-vous ne peut lui être demandé. C'est
-     volontaire — on ne prend pas rendez-vous avec quelqu'un qui n'existe
-     pas encore dans l'application.
+   ► POUR OUVRIR OU FERMER UNE ANTENNE
+     Le champ  ouvert  commande tout. À false, l'antenne s'affiche en
+     « bientôt » : visible, mais aucun rendez-vous ne peut lui être demandé,
+     et les dossiers du territoire reviennent au Sud. À true, elle est
+     pleinement active. Déposer ce fichier suffit : la vitrine, le test de
+     positionnement et les rendez-vous se mettent à jour d'un coup.
    ========================================================================== */
 
 (function (global) {
@@ -41,7 +35,8 @@
 
       // Le territoire couvert, tel qu'on le dit aux candidats.
       libelle: 'Sud',
-      couvre: 'Saint-Joseph, Saint-Pierre, Le Tampon, Saint-Louis, Petite-Île, Saint-Philippe',
+      couvre: 'Saint-Joseph, Saint-Pierre, Le Tampon, Saint-Louis, Petite-Île, Saint-Philippe, '
+            + 'Entre-Deux, L\'Étang-Salé, Cilaos, Les Avirons',
 
       // Les codes des conseillers de rdv.js qui reçoivent ici.
       // Le premier de la liste est celui vers qui partent les demandes
@@ -51,27 +46,27 @@
       couleur: '#2C6E9B'
     },
 
-    /* ═══ NORD–EST–OUEST ═══════════════════════════════════════════════════
-       En attente du compte du référent. Voir le mode d'emploi en tête.      */
+    /* ═══ NORD–EST–OUEST — Saint-Denis ═════════════════════════════════════
+       Ouverte le 2 octobre 2026. Référent : Gabriel Go.                     */
     nord: {
-      ouvert: false,
+      ouvert: true,
 
       nom: 'JTCF Nord',
-      ville: 'À COMPLÉTER',
-      adresse: 'À COMPLÉTER',
-      codePostal: 'À COMPLÉTER',
-      commune: 'À COMPLÉTER',
-      telephone: 'À COMPLÉTER',
-      courriel: 'contact@tbrgroup.fr',   // en attendant, tout arrive chez Alexandre
+      ville: 'Saint-Denis',
+      adresse: '27 rue du Bois de Nèfles',
+      codePostal: '97400',
+      commune: 'Saint-Denis',
+      telephone: '06 93 86 98 44',
+      courriel: 'commercial.go@tbrgroup.fr',   // Gabriel Go, référent Nord
 
       libelle: 'Nord, Est et Ouest',
-      couvre: 'Saint-Denis, Sainte-Marie, Sainte-Suzanne, Saint-André, '
-            + 'Saint-Benoît, Saint-Paul, Le Port, La Possession, Saint-Leu',
+      couvre: 'Saint-Denis, Sainte-Marie, Sainte-Suzanne, Saint-André, Bras-Panon, '
+            + 'Saint-Benoît, La Plaine-des-Palmistes, Sainte-Rose, Salazie, '
+            + 'Saint-Paul, Le Port, La Possession, Saint-Leu, Trois-Bassins',
 
-      conseillers: [],                   // ex. ['XX'] quand son code existe
+      conseillers: ['GG'],               // Gabriel Go
 
-      couleur: '#2f855a',
-      note: 'Antenne en cours d\'ouverture. Le référent sera annoncé prochainement.'
+      couleur: '#2f855a'
     }
   };
 
@@ -130,6 +125,16 @@
     return 'sud';
   }
 
+  // Les communes de chaque antenne, dans l'ordre alphabétique.
+  function communes(id) {
+    var a = ANTENNES[id];
+    if (!a) return [];
+    return String(a.couvre || '').split(',')
+      .map(function (v) { return v.trim(); })
+      .filter(Boolean)
+      .sort(function (x, y) { return x.localeCompare(y, 'fr'); });
+  }
+
   // Les options prêtes à poser dans une liste déroulante.
   function options(seulementOuvertes) {
     return (seulementOuvertes ? ouvertes() : liste()).map(function (a) {
@@ -140,6 +145,7 @@
   global.JTCF_ANTENNES = {
     ANTENNES: ANTENNES,
     liste: liste,
+    communes: communes,
     ouvertes: ouvertes,
     get: get,
     referent: referent,
