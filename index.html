@@ -151,9 +151,11 @@ textarea{resize:vertical;min-height:75px}
     </div>
     <div class="info-box">
       <h4 class="t" data-fr="Contact" data-cr="Kontakt"></h4>
-      <div class="info-row">📍 <span>20A rue Général Lambert, 97480 Saint-Joseph</span></div>
-      <div class="info-row">🗺️ <span>Interventions : Saint-Joseph · Saint-Pierre · Petite-Île · Saint-Philippe</span></div>
-      <div class="info-row">✉️ <span>contact@tbrgroup.fr</span></div>
+      <!-- Rempli depuis antennes.js ; ce contenu ne sert que si le fichier manque. -->
+      <div id="contact-antennes">
+        <div class="info-row">📍 <span>20A rue Général Lambert, 97480 Saint-Joseph</span></div>
+        <div class="info-row">✉️ <span>contact@tbrgroup.fr</span></div>
+      </div>
       <div class="info-row">🕐 <span class="t" data-fr="Du lundi au vendredi" data-cr="Lindi osi vandrédi"></span></div>
     </div>
   </div>
@@ -216,18 +218,14 @@ textarea{resize:vertical;min-height:75px}
     <button class="back" onclick="show('accueil')">← <span class="t" data-fr="Retour" data-cr="Rétour"></span></button>
   </div>
   <div class="pg">
-    <div class="map-cards">
+    <!-- Une carte par antenne, remplie depuis antennes.js ; ce contenu ne sert que si le fichier manque. -->
+    <div class="map-cards" id="sites-antennes">
       <div class="map-card" style="flex-direction:column;align-items:flex-start;gap:10px">
         <div style="display:flex;align-items:center;gap:12px;width:100%">
           <div class="map-pin">🏢</div>
           <div class="map-info"><h4>JT Conseil Formation</h4><p>20A rue Général Lambert</p><p>97480 Saint-Joseph</p></div>
           <a class="map-btn" href="https://maps.google.com/?q=20A+rue+General+Lambert+97480+Saint-Joseph+La+Reunion" target="_blank">Maps</a>
         </div>
-      </div>
-      <div class="info-box" style="margin-top:4px">
-        <h4 class="t" data-fr="Zones d'intervention" data-cr="Zòn dintèrvansion"></h4>
-        <div class="info-row">🗺️ <span>Saint-Joseph · Saint-Pierre · Petite-Île · Saint-Philippe</span></div>
-        <div class="info-row" style="border:none;font-size:12px"><span class="t" data-fr="Nous intervenons sur l'ensemble du Sud de La Réunion." data-cr="Nou intervèn su tout Sid La Rényon."></span></div>
       </div>
     </div>
   </div>
@@ -282,6 +280,7 @@ textarea{resize:vertical;min-height:75px}
   </div>
 </div>
 
+<script src="antennes.js"></script>
 <script>
 var lang='fr';
 
@@ -503,7 +502,50 @@ function resetForm(){
   document.getElementById('success').style.display='none';
 }
 
+// ═══════════════════════════════════════════════════════════
+// ANTENNES — adresses, contacts et communes viennent de antennes.js.
+// Pour changer une adresse ou ouvrir une antenne : modifier antennes.js,
+// jamais cette page.
+// ═══════════════════════════════════════════════════════════
+function echap(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+function renderAntennes(){
+  var A=window.JTCF_ANTENNES;
+  if(!A) return;   // fichier absent : on garde l'adresse du Sud écrite dans la page
+  var contact='', sites='';
+  A.liste().forEach(function(l){
+    var a=A.get(l.id);
+    var titre='JTCF '+a.libelle+(a.ouvert?'':' — bientôt');
+    if(!a.ouvert){
+      contact+='<div class="info-row">📍 <span><strong>'+echap(titre)+'</strong></span></div>';
+      sites+='<div class="map-card"><div class="map-pin">🏢</div><div class="map-info"><h4>'+echap(titre)+'</h4><p>Ouverture prochaine</p></div></div>';
+      return;
+    }
+    var adr=a.adresse+', '+a.codePostal+' '+a.commune;
+    var maps='https://maps.google.com/?q='+encodeURIComponent(adr+' La Réunion');
+    var tel=String(a.telephone||'').replace(/\s/g,'');
+    contact+='<div class="info-row" style="flex-direction:column;gap:3px">'
+      +'<span style="color:'+a.couleur+';font-weight:600;font-size:12px">'+echap(titre)+'</span>'
+      +'<span>📍 '+echap(adr)+'</span>'
+      +'<span>📞 <a href="tel:'+tel+'" style="color:inherit">'+echap(a.telephone)+'</a> · ✉️ <a href="mailto:'+echap(a.courriel)+'" style="color:inherit">'+echap(a.courriel)+'</a></span>'
+      +'</div>';
+    sites+='<div class="map-card" style="flex-direction:column;align-items:flex-start;gap:10px;border-left:3px solid '+a.couleur+'">'
+      +'<div style="display:flex;align-items:center;gap:12px;width:100%">'
+      +'<div class="map-pin">🏢</div>'
+      +'<div class="map-info"><h4>'+echap(titre)+'</h4><p>'+echap(a.adresse)+'</p><p>'+echap(a.codePostal+' '+a.commune)+'</p></div>'
+      +'<a class="map-btn" href="'+maps+'" target="_blank" rel="noopener">Maps</a>'
+      +'</div>'
+      +'<div class="info-row" style="border:none;padding:0">📞 <span><a href="tel:'+tel+'" style="color:inherit">'+echap(a.telephone)+'</a></span></div>'
+      +'<div class="info-row" style="border:none;padding:0">✉️ <span><a href="mailto:'+echap(a.courriel)+'" style="color:inherit">'+echap(a.courriel)+'</a></span></div>'
+      +'<div class="info-row" style="border:none;padding:0">🗺️ <span>'+echap(A.communes(l.id).join(' · '))+'</span></div>'
+      +'</div>';
+  });
+  document.getElementById('contact-antennes').innerHTML=contact;
+  document.getElementById('sites-antennes').innerHTML=sites;
+}
+
 renderFormations();
+renderAntennes();
 document.querySelectorAll('.t').forEach(function(el){var v=el.getAttribute('data-fr');if(v)el.textContent=v;});
 </script>
   <script src="pied.js"></script>
