@@ -244,6 +244,11 @@ textarea{resize:vertical;min-height:75px}
       <div class="fg"><label class="t" data-fr="Nom *" data-cr="Non *"></label><input type="text" id="nom" placeholder="..."></div>
       <div class="fg"><label class="t" data-fr="Prénom *" data-cr="Prenon *"></label><input type="text" id="prenom" placeholder="..."></div>
       <div class="fg"><label class="t" data-fr="Téléphone *" data-cr="Téléphone *"></label><input type="tel" id="tel" placeholder="0692 00 00 00"></div>
+      <div class="fg"><label class="t" data-fr="E-mail (optionnel)" data-cr="E-mail (optionèl)"></label><input type="email" id="email" placeholder="prenom.nom@exemple.com"></div>
+      <div class="fg"><label class="t" data-fr="Votre commune *" data-cr="Out komine *"></label>
+        <!-- Rempli depuis antennes.js : la commune décide quelle antenne reçoit la demande. -->
+        <select id="commune"><option value="">--</option></select>
+      </div>
       <div class="fg"><label class="t" data-fr="Date de naissance *" data-cr="Dat naissans *"></label><input type="date" id="ddn"></div>
       <div class="fg"><label class="t" data-fr="Situation actuelle *" data-cr="Sitiyasion aktyèl *"></label>
         <select id="situation">
@@ -269,12 +274,13 @@ textarea{resize:vertical;min-height:75px}
       </div>
       <div class="fg"><label class="t" data-fr="Message (optionnel)" data-cr="Mésaz (optionèl)"></label><textarea id="message" placeholder="..."></textarea></div>
       <p style="font-size:11px;color:var(--muted);margin-bottom:10px" class="t" data-fr="* Champs obligatoires." data-cr="* Samp obligatwar."></p>
-      <button class="submit-btn t" data-fr="📩 Envoyer ma demande" data-cr="📩 Anvoyé mon domand" onclick="envoyerRDV()"></button>
+      <p style="font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.5">Vos informations servent uniquement à vous recontacter au sujet de votre demande. Elles ne sont jamais transmises à des tiers.</p>
+      <button class="submit-btn t" id="btn-envoyer" data-fr="📩 Envoyer ma demande" data-cr="📩 Anvoyé mon domand" onclick="envoyerRDV()"></button>
     </div>
     <div class="success-box" id="success">
       <div class="ico">✅</div>
       <h3 class="t" data-fr="Demande envoyée !" data-cr="Domand anvoyé !"></h3>
-      <p class="t" data-fr="Votre messagerie va s'ouvrir. Envoyez l'e-mail pour confirmer. L'équipe JTCF vous contactera rapidement." data-cr="Zot mésazri va louvèr. Anvoyé l'e-mail pou konfirmé."></p>
+      <p id="success-texte">L'équipe JTCF vous contactera rapidement.</p>
       <button class="submit-btn" style="margin-top:14px;background:var(--dark3);color:var(--text)" onclick="resetForm()">Nouvelle demande</button>
     </div>
   </div>
@@ -477,24 +483,75 @@ function show(id){
   window.scrollTo(0,0);
 }
 
+// La demande part directement dans l'application alternance (nœud rdvDemandes),
+// adressée aux conseillers de l'antenne qui couvre la commune. Elle apparaît
+// dans l'onglet « À valider » de leur espace CIP.
+var RDV_BASE='https://jtcf-alternance-default-rtdb.europe-west1.firebasedatabase.app/rdvDemandes/';
+
+function remplirCommunes(){
+  var A=window.JTCF_ANTENNES, sel=document.getElementById('commune');
+  if(!A) return;
+  var toutes=[];
+  A.liste().forEach(function(l){ A.communes(l.id).forEach(function(c){ toutes.push(c); }); });
+  toutes.sort(function(x,y){return x.localeCompare(y,'fr');});
+  toutes.forEach(function(c){ var o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o); });
+  var o=document.createElement('option'); o.value='Autre'; o.textContent='Autre commune'; sel.appendChild(o);
+}
+
 function envoyerRDV(){
   var nom=document.getElementById('nom').value.trim();
   var prenom=document.getElementById('prenom').value.trim();
   var tel=document.getElementById('tel').value.trim();
+  var email=document.getElementById('email').value.trim();
+  var commune=document.getElementById('commune').value;
   var ddn=document.getElementById('ddn').value;
   var sit=document.getElementById('situation').value;
   var form=document.getElementById('formation').value;
   var msg=document.getElementById('message').value.trim();
-  if(!nom||!prenom||!tel||!ddn||!sit||!form){alert('Merci de remplir tous les champs obligatoires (*).');return;}
+  if(!nom||!prenom||!tel||!commune||!ddn||!sit||!form){alert('Merci de remplir tous les champs obligatoires (*).');return;}
+  // L'âge seul suffit à l'équipe : on ne stocke pas la date de naissance.
   var age='';if(ddn){var d=new Date(ddn),now=new Date();age=Math.floor((now-d)/31557600000)+' ans';}
-  var corps='Nouvelle demande de rendez-vous — JTCF\n\nNom : '+nom+'\nPrénom : '+prenom+'\nTéléphone : '+tel+'\nDate de naissance : '+ddn+(age?' ('+age+')':'')+'\nSituation : '+sit+'\nFormation souhaitée : '+form+(msg?'\n\nMessage :\n'+msg:'')+'\n\n---\nEnvoyé depuis l\'application JTCF';
-  window.location.href='mailto:contact@tbrgroup.fr?subject='+encodeURIComponent('Demande de RDV — '+prenom+' '+nom)+'&body='+encodeURIComponent(corps);
-  document.getElementById('form-container').style.display='none';
-  document.getElementById('success').style.display='block';
+
+  var A=window.JTCF_ANTENNES;
+  var antenne=A?A.antenneDe(commune):'sud';
+  var fiche=A?A.get(antenne):null;
+  if(!fiche||!fiche.ouvert){ antenne='sud'; fiche=A?A.get('sud'):null; }
+  var conseillers=(fiche&&fiche.conseillers&&fiche.conseillers.length)?fiche.conseillers.join(','):'?';
+
+  var demande={
+    qui:'public', type:'public', nom:prenom+' '+nom,
+    tel:tel, email:email, commune:commune, antenne:antenne, age:age, situation:sit,
+    avec:conseillers, motif:'Information formation — '+form, dispo:'', message:msg,
+    etat:'demande', reponse:'', quand:'', le:new Date().toISOString(), notifie:false
+  };
+  var id='p_'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+  var bouton=document.getElementById('btn-envoyer');
+  bouton.disabled=true; bouton.textContent='Envoi en cours…';
+
+  fetch(RDV_BASE+id+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(demande)})
+    .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); })
+    .then(function(){
+      var ville=fiche?fiche.ville:'Saint-Joseph';
+      document.getElementById('success-texte').textContent=
+        'Votre demande est bien arrivée à notre antenne de '+ville+'. Un conseiller vous rappelle rapidement au '+tel+'.';
+      document.getElementById('form-container').style.display='none';
+      document.getElementById('success').style.display='block';
+    })
+    .catch(function(){
+      // Pas de réseau ou base injoignable : on retombe sur le courriel, vers la bonne antenne.
+      var dest=A?A.courrielDe(antenne):'contact@tbrgroup.fr';
+      var corps='Nouvelle demande de rendez-vous — JTCF\n\nNom : '+nom+'\nPrénom : '+prenom+'\nTéléphone : '+tel+(email?'\nE-mail : '+email:'')+'\nCommune : '+commune+'\nÂge : '+age+'\nSituation : '+sit+'\nFormation souhaitée : '+form+(msg?'\n\nMessage :\n'+msg:'')+'\n\n---\nEnvoyé depuis le site JTCF';
+      window.location.href='mailto:'+dest+'?subject='+encodeURIComponent('Demande de RDV — '+prenom+' '+nom)+'&body='+encodeURIComponent(corps);
+      document.getElementById('success-texte').textContent='Votre messagerie va s\'ouvrir : envoyez l\'e-mail pour confirmer votre demande.';
+      document.getElementById('form-container').style.display='none';
+      document.getElementById('success').style.display='block';
+    })
+    .then(function(){ bouton.disabled=false; bouton.textContent=bouton.getAttribute('data-'+lang); });
 }
 
 function resetForm(){
-  ['nom','prenom','tel','message'].forEach(function(id){document.getElementById(id).value='';});
+  ['nom','prenom','tel','email','message'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('commune').value='';
   document.getElementById('ddn').value='';
   document.getElementById('situation').value='';
   document.getElementById('formation').value='';
@@ -546,6 +603,7 @@ function renderAntennes(){
 
 renderFormations();
 renderAntennes();
+remplirCommunes();
 document.querySelectorAll('.t').forEach(function(el){var v=el.getAttribute('data-fr');if(v)el.textContent=v;});
 </script>
   <script src="pied.js"></script>
