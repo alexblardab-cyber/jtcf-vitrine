@@ -27,7 +27,7 @@
       ouvert: true,
       nom: 'JTCF Sud',
       ville: 'Saint-Joseph',
-      adresse: '20a rue du Général Lambert',
+      adresse: '13 rue du Général Lambert',
       codePostal: '97480',
       commune: 'Saint-Joseph',
       telephone: '06 92 33 47 88',
